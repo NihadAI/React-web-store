@@ -1,71 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.scss";
 import Button from "./Button";
 import Modal from "./Modal";
+import ProductCard from "./productCard";
+import productsData from "./products.json";
 
 const App = () => {
-  const [firstModalOpen, setFirstModalOpen] = useState(false);
-  const [secondModalOpen, setSecondModalOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
 
-  const openFirstModal = () => {
-    setFirstModalOpen(true);
+  useEffect(() => {
+    setProducts(productsData);
+  }, []);
+
+  const handleAddToCart = (product) => {
+    setCartItems((prevCartItems) => [...prevCartItems, product]);
   };
 
-  const closeFirstModal = () => {
-    setFirstModalOpen(false);
+  const handleAddToFavorites = (product) => {
+    const isAlreadyInFavorites = favoriteItems.some((item) => item.sku === product.sku);
+  
+    if (isAlreadyInFavorites) {
+      setFavoriteItems((prevFavoriteItems) =>
+        prevFavoriteItems.filter((item) => item.sku !== product.sku)
+      );
+    } else {
+      setFavoriteItems((prevFavoriteItems) => [...prevFavoriteItems, product]);
+    }
   };
-
-  const openSecondModal = () => {
-    setSecondModalOpen(true);
-  };
-
-  const closeSecondModal = () => {
-    setSecondModalOpen(false);
-  };
+  
 
   return (
     <div className="App">
-      <Button
-        backgroundColor="#007bff"
-        text="Open first modal"
-        onClick={openFirstModal}
-      />
-      <Button
-        backgroundColor="#28a745"
-        text="Open second modal"
-        onClick={openSecondModal}
-      />
-
-      {firstModalOpen && (
-        <Modal
-          header="First Modal"
-          closeButton={true}
-          text="This is the first modal window."
-          actions={
-            <div>
-              <button onClick={closeFirstModal}>Close</button>
-            </div>
-          }
-          onClose={closeFirstModal}
-        />
-      )}
-
-      {secondModalOpen && (
-        <Modal
-          header="Second Modal"
-          closeButton={true}
-          text="This is the second modal window."
-          actions={
-            <div>
-              <button onClick={closeSecondModal}>Close</button>
-            </div>
-          }
-          onClose={closeSecondModal}
-        />
-      )}
+      <div className="header">
+        <div className="cart-icon">
+          <i className="fa fa-shopping-cart" />
+          <span>{cartItems.length}</span>
+        </div>
+        <div className="favorite-icon">
+          <i className="fa fa-star" />
+          <span>{favoriteItems.length}</span>
+        </div>
+      </div>
+      <div className="product-list">
+        {products.map((product) => (
+          <ProductCard
+            key={product.sku}
+            product={product}
+            onAddToCart={handleAddToCart}
+            onAddToFavorites={handleAddToFavorites}
+            isFavorite={favoriteItems.some((item) => item.sku === product.sku)}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
 export default App;
-  

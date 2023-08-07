@@ -1,9 +1,46 @@
 .App {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 50px;
   
-    button {
-      color: #fff;
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+      background-color: #f0f0f0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+  
+      .cart-icon,
+      .favorite-icon {
+        margin-right: 20px;
+        position: relative;
+        cursor: pointer;
+  
+        i {
+          font-size: 24px;
+        }
+  
+        span {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: #007bff;
+          color: #fff;
+          border-radius: 50%;
+          padding: 3px 6px;
+          font-size: 12px;
+        }
+      }
+    }
+  
+    .product-list {
+      margin-top: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
   }
   
